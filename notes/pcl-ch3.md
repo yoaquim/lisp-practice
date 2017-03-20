@@ -12,7 +12,7 @@ Keyword parameters (`&key`) allow you to write functions that can be called with
 - in order to determine if  `NIL` was explicitly passed or just assigned if no value was present for the corresponding keyword, you can use a _supplied-p_ parameter.
 
 <a name=keyword_examples></a>
-#### Examples 
+#### Example
 
 - `(defun foo (&key a b c) (list a b c))`
 
@@ -26,12 +26,23 @@ Keyword parameters (`&key`) allow you to write functions that can be called with
 (foo)                 ==> (NIL 20 30 NIL)
 ~~~
 
+### &rest
+
+Like `&key`, `&rest` modifies the way arguments are parsed. With a `&rest` in its parameter list, a function or macro can take an arbitrary number of arguments, which are collected into a single list that becomes the value of the variable whose name follows the `&rest`.
+
+#### Example
+~~~lisp
+TODO
+~~~
+
 &nbsp;
 
 ## Macros
 Lisp macros are like “code generators” that run automatically by the compiler. 
 
 When a Lisp expression contains a call to a macro, instead of evaluating the arguments and passing them to the function, the Lisp compiler passes the arguments, unevaluated, to the macro code, which returns a new Lisp expression that is then evaluated in place of the original macro call.
+
+A macro is just another mechanism for creating abstractions – specifically, at the syntactic level.
 
 #### Example
 
@@ -56,6 +67,8 @@ The call to `backwards` essentially converts into:
 
 - `remove-if-not`  & `remove-if` are typical `filter` functions
 
+- when using `MACROEXPAND-1`, followed by a macro, it'll call the macro code with appropriate arguments and return the expansion
+
 - single quotes (`’`) stop Lisp from evaluating a form (a keyword, e.g. `’equal`)
 
 - a back quote (``` ` ```) before an expression stops evaluation just like a forward quote, **but any subexpression that’s preceded by a comma**
@@ -66,4 +79,16 @@ The call to `backwards` essentially converts into:
 	~~~lisp
 	`(1 2 (+ 1 2))        ==> (1 2 (+ 1 2))
 	`(1 2 ,(+ 1 2))       ==> (1 2 3)
+	~~~
+	
+<br>
+
+- `,@` “splices” the value of the following expression (which must evaluate to a list) into the an enclosing list; it "breaks" off the elements of the list and returns them to the current list
+
+	#### Example
+	
+	~~~lisp
+	`(and ,(list 1 2 3))   ==> (AND (1 2 3))
+	`(and ,@(list 1 2 3))  ==> (AND 1 2 3)
+	`(and ,@(list 1 2 3) 4) ==> (AND 1 2 3 4)
 	~~~
