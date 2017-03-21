@@ -1,4 +1,5 @@
 # Practical Common Lisp: Chapter 3
+
 ## Practical: A Simple Database
 
 &nbsp;
